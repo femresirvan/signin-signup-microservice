@@ -6,7 +6,7 @@ const cors = require('cors');
 const path = require('path');
 const router = require('./routers/router');
 const bodyParser = require('body-parser');
-const sass = require('node-sass-middleware');
+const { json } = require('express');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({
@@ -15,14 +15,8 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.set('views', './views');
-app.use(
-    sass({
-        src: __dirname + '',
-        dest: __dirname + '',
-        debug: true,
-    })
-);
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/bootstrap', express.static(path.join(__dirname, '/node_modules/bootstrap/dist')));
 app.use('/', router);
 
 if (result.error) {

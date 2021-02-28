@@ -1,0 +1,9 @@
+// @import './deneme2';
+
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
+$primary : red;
+.dayi{
+    background-color: $primary;
+    height: 300px; 
+    width: 400px;
+}
