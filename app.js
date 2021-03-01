@@ -7,6 +7,8 @@ const path = require('path');
 const router = require('./routers/router');
 const bodyParser = require('body-parser');
 const { json } = require('express');
+const db = require('./db/db')
+
 
 app.use(cors());
 app.use(bodyParser.urlencoded({
