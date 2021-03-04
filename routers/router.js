@@ -5,7 +5,7 @@ const apiController = require('../controllers/apiController') //.default;
 router.get('/', homePageController);
 //router.get('/api', homePageController);
 router.get('/api/getAllUsers', apiController.getAllUsers);
-router.post('/api/oneUser', apiController.oneUser)
-router.post('/api/giris', apiController.giris)
+router.post('/api/signUp', apiController.signUp)
+router.post('/api/signIn', apiController.signIn)
 
 module.exports = router;
