@@ -36,7 +36,7 @@ const signIn = async(req, res) => {
         if (err) {
             res.json(err)
         } else if (!gamer) {
-            res.json('Hatalı bilgi...') // e posta hatalı
+            res.json('Hatalı bilghjhji...') // e posta hatalı
         } else {
             const sifreKontrol = bcrypt.compare(req.body.sifre, gamer.sifre, (error, result) => {
                 if (result) {
@@ -58,7 +58,10 @@ const signIn = async(req, res) => {
 }
 const auth = async(req, res, next) => {
     try {
-        const token = await req.header('Authorization').replace('Bearer ', '');
+        const token = await req.headers['authorization'] && req.headers['authorization'].split(' ')[1]
+        if (token == null) {
+            return res.json('hata')
+        }
         const sonuc = jwt.verify(token, 'supersecret')
 
         //console.log(sonuc);
@@ -74,11 +77,20 @@ const auth = async(req, res, next) => {
 const me = (req, res) => {
     res.json(req.user)
 }
+const me2 = (req, res) => {
+    res.json(req.user)
+}
+
+const signUpwithGoogle = (req, res) => {
+    res.redirect('/api/me2')
+}
 
 module.exports = {
     getAllUsers,
     signUp,
     signIn,
     auth,
-    me
+    me,
+    me2,
+    signUpwithGoogle
 }

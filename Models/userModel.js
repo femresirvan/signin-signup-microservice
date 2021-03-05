@@ -11,7 +11,7 @@ const gamerSchema = new schema({
     },
     sifre: {
         type: String,
-        required: true,
+        //required: true,
         trim: true,
     }
 })
