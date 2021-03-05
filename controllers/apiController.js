@@ -56,8 +56,29 @@ const signIn = async(req, res) => {
         }
     })
 }
+const auth = async(req, res, next) => {
+    try {
+        const token = await req.header('Authorization').replace('Bearer ', '');
+        const sonuc = jwt.verify(token, 'supersecret')
+
+        //console.log(sonuc);
+        const bulunan = await Gamer.findById(sonuc.id)
+        req.user = bulunan
+        next()
+    } catch (err) {
+        console.log(err);
+        res.json(err)
+    }
+}
+
+const me = (req, res) => {
+    res.json(req.user)
+}
+
 module.exports = {
     getAllUsers,
     signUp,
-    signIn
+    signIn,
+    auth,
+    me
 }
