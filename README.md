@@ -19,26 +19,5 @@
 
 ###Flowchart for Both Sign-in Sign-up Operations
 
-```flow
-st=>start: Sign-in & Sign-up
-kayit?=>condition: Do you have any account?
-createuser=>operation: Create new user
-validateuser=>operation: Validate user account
-cond=>condition: Successful Yes or No?
-cond2=>condition: Successful Yes or No?
-e=>end: Success
-e2=>end: Success
-in=>inputoutput: Submit user email and password 
-or Authenticate via Google Account
-in2=>inputoutput: Submit user email and password 
-or Sign-up via Google Account
-st->kayit?
-kayit?(yes)->in
-kayit?(no)->in2
-in->validateuser->cond
-in2->createuser->cond2
-cond(yes)->e
-cond(no)->in
-cond2(yes)->e2
-cond2(no)->in2
-```
+![](https://i.ibb.co/s6gXP1q/flowchart.png)
+
