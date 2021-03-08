@@ -1,19 +1,21 @@
-const Gamer = require('../Models/userModel')
+const User = require('../Models/userModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 const getAllUsers = (req, res) => {
-    Gamer.find()
+    User.find()
         .then(sonuc => res.json(sonuc))
 }
 
 const signUp = async(req, res) => {
     try {
-        var hashedSifre = bcrypt.hash(req.body.sifre, 8);
-        var hash = JSON.stringify(hashedSifre) // hashesSifre object döndüğü için stringe çevirdik
-        const gamer = Gamer.create({
+        var hashedPassword = await bcrypt.hash(req.body.password, 8);
+        var hash = JSON.stringify(hashedPassword) // hashesPassword object döndüğü için stringe çevirdik
+        const user = User.create({
+            name: req.body.name,
             email: req.body.email,
-            sifre: hash
+            password: hash,
+            userIsHere: true
         }, (err, user) => {
             if (err) {
                 if (err.code == 11000) {
@@ -32,65 +34,62 @@ const signUp = async(req, res) => {
 }
 
 const signIn = async(req, res) => {
-    const gamer = await Gamer.findOne({ email: req.body.email }, (err, gamer) => {
+    const user = await User.findOne({ email: req.body.email }, async(err, user) => {
+        console.log(user);
         if (err) {
             res.json(err)
-        } else if (!gamer) {
-            res.json('Hatalı bilghjhji...') // e posta hatalı
+        } else if (!user) {
+            res.json('Hatalı bilgi...') // e posta hatalı
         } else {
-            const sifreKontrol = bcrypt.compare(req.body.sifre, gamer.sifre, (error, result) => {
-                if (result) {
-                    const token = jwt.sign({ id: gamer._id }, 'supersecret', {
+            bcrypt.compare(req.body.password, user.password, (error, result) => {
+                //console.log(req.body.password + user.password);
+                if (error) {
+                    res.json(error)
+                } else if (!result) {
+                    res.json('Hatalı bilgi...') // şifre hatalı
+                } else if (result) {
+                    const token = jwt.sign({ id: user._id }, 'supersecret', {
                         expiresIn: '1h'
                     })
                     res.json({
-                        gamer: gamer,
+                        user: user,
                         token: token
                     })
-                }
-                if (result == false) {
-                    res.json('Hatalı bilgi...') // şifre hatalı
                 }
 
             })
         }
     })
 }
-const auth = async(req, res, next) => {
-    try {
-        const token = await req.headers['authorization'] && req.headers['authorization'].split(' ')[1]
-        if (token == null) {
-            return res.json('hata')
-        }
-        const sonuc = jwt.verify(token, 'supersecret')
-
-        //console.log(sonuc);
-        const bulunan = await Gamer.findById(sonuc.id)
-        req.user = bulunan
-        next()
-    } catch (err) {
-        console.log(err);
-        res.json(err)
-    }
-}
 
 const me = (req, res) => {
-    res.json(req.user)
+    res.json('Giriş başarılı!')
 }
 const me2 = (req, res) => {
-    res.json(req.user)
+    res.json("Google ile giriş başarılı!")
 }
 
 const signUpwithGoogle = (req, res) => {
     res.redirect('/api/me2')
 }
 
+const logOut = (req, res) => {
+    console.log(req);
+    req.logout();
+    res.redirect('/')
+}
+
+const errorG = (req, res) => {
+    res.json('Hata :(')
+}
+
 module.exports = {
     getAllUsers,
     signUp,
     signIn,
-    auth,
     me,
     me2,
-    signUpwithGoogle
+    signUpwithGoogle,
+    logOut,
+    errorG
 }
