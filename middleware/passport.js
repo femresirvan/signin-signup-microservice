@@ -15,21 +15,19 @@ passport.use(new googlePass({
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         callbackURL: "/auth/google/callback",
-        proxy: true,
     },
     (accessToken, refreshToken, profile, done) => {
         //console.log("access token: ", accessToken);
         //console.log(profile);
-        User.findOne({ email: profile.emails[0].value })
+        User.findOne({ googleId: profile.id })
             .then((currentUser) => {
                 if (currentUser) {
                     done(null, currentUser)
                 } else {
                     new User({
-                            //googleId: profile.id,
+                            googleId: profile.id,
                             name: profile.name.givenName,
-                            email: profile.emails[0].value,
-                            userIsHere: true
+                            email: profile.emails[0].value
                         }).save()
                         .then(newUser => done(null, newUser));
                 }

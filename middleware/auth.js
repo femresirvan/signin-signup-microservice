@@ -1,4 +1,6 @@
 module.exports = async function auth(req, res, next) {
+    const jwt = require('jsonwebtoken')
+    const User = require('../Models/userModel')
     try {
         const token = await req.headers['authorization'] && req.headers['authorization'].split(' ')[1]
         if (token == null) {

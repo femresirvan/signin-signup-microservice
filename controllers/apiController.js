@@ -10,12 +10,11 @@ const getAllUsers = (req, res) => {
 const signUp = async(req, res) => {
     try {
         var hashedPassword = await bcrypt.hash(req.body.password, 8);
-        var hash = JSON.stringify(hashedPassword) // hashesPassword object döndüğü için stringe çevirdik
+
         const user = User.create({
             name: req.body.name,
             email: req.body.email,
-            password: hash,
-            userIsHere: true
+            password: hashedPassword
         }, (err, user) => {
             if (err) {
                 if (err.code == 11000) {
@@ -35,7 +34,7 @@ const signUp = async(req, res) => {
 
 const signIn = async(req, res) => {
     const user = await User.findOne({ email: req.body.email }, async(err, user) => {
-        console.log(user);
+        //console.log(user);
         if (err) {
             res.json(err)
         } else if (!user) {
@@ -46,7 +45,7 @@ const signIn = async(req, res) => {
                 if (error) {
                     res.json(error)
                 } else if (!result) {
-                    res.json('Hatalı bilgi...') // şifre hatalı
+                    res.json('Hatalı bilgi..jhj.') // şifre hatalı
                 } else if (result) {
                     const token = jwt.sign({ id: user._id }, 'supersecret', {
                         expiresIn: '1h'
@@ -63,20 +62,17 @@ const signIn = async(req, res) => {
 }
 
 const me = (req, res) => {
-    res.json('Giriş başarılı!')
+    res.json(req.user)
 }
 const me2 = (req, res) => {
-    res.json("Google ile giriş başarılı!")
-}
-
-const signUpwithGoogle = (req, res) => {
-    res.redirect('/api/me2')
+    res.json(req.user)
 }
 
 const logOut = (req, res) => {
-    console.log(req);
+    //console.log(req);
     req.logout();
-    res.redirect('/')
+    //res.redirect('/')
+    res.json(req.user)
 }
 
 const errorG = (req, res) => {
@@ -89,7 +85,6 @@ module.exports = {
     signIn,
     me,
     me2,
-    signUpwithGoogle,
     logOut,
     errorG
 }

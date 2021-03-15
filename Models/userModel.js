@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const userSchema = new schema({
+    googleId: {
+        type: String
+    },
     name: {
         type: String,
         trim: true,
@@ -18,10 +21,6 @@ const userSchema = new schema({
         type: String,
         //required: true,
         trim: true,
-    },
-    userIsHere: {
-        type: Boolean,
-        default: true
     }
 })
 
