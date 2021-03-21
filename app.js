@@ -10,6 +10,14 @@ const passport = require('passport');
 require('./middleware/passport')
 const session = require('cookie-session');
 
+
+app.use(function(error, req, res, next) {
+    if (error instanceof SyntaxError) { //Handle SyntaxError here.
+        return res.status(500).send({ data: "Invalid data" });
+    } else {
+        next();
+    }
+});
 app.use(cors());
 app.use(express.urlencoded({
     'extended': 'true'
@@ -21,8 +29,8 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/bootstrap', express.static(path.join(__dirname, '/node_modules/bootstrap/dist')));
 
 app.use(session({
-    keys: 'This is a secret',
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    keys: ['deneme']
 
 }));
 

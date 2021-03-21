@@ -10,7 +10,6 @@ const getAllUsers = (req, res) => {
 const signUp = async(req, res) => {
     try {
         var hashedPassword = await bcrypt.hash(req.body.password, 8);
-
         const user = User.create({
             name: req.body.name,
             email: req.body.email,
@@ -45,7 +44,7 @@ const signIn = async(req, res) => {
                 if (error) {
                     res.json(error)
                 } else if (!result) {
-                    res.json('Hatalı bilgi..jhj.') // şifre hatalı
+                    res.json('Hatalı bilgi...') // şifre hatalı
                 } else if (result) {
                     const token = jwt.sign({ id: user._id }, 'supersecret', {
                         expiresIn: '1h'
@@ -62,16 +61,16 @@ const signIn = async(req, res) => {
 }
 
 const me = (req, res) => {
-    res.json(req.user)
+    res.json('Giriş başarılı!')
 }
-const me2 = (req, res) => {
+const signinwithgoogle = (req, res) => {
     res.json(req.user)
 }
 
 const logOut = (req, res) => {
-    //console.log(req);
     req.logout();
-    //res.redirect('/')
+    res.redirect('/')
+    req.session = null
     res.json(req.user)
 }
 
@@ -84,7 +83,7 @@ module.exports = {
     signUp,
     signIn,
     me,
-    me2,
+    signinwithgoogle,
     logOut,
     errorG
 }
