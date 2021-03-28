@@ -15,7 +15,9 @@ router.get('/api/google', passport.authenticate('google', {
 }))
 router.get('/auth/google/callback', passport.authenticate('google', {
     failureRedirect: '/auth/error',
-}))
+}), (req, res) => {
+    res.redirect('/api/signinwithgoogle')
+})
 router.get('/api/signinwithgoogle', apiController.signinwithgoogle)
 router.get('/api/logout', apiController.logOut)
 router.get('/api/error', apiController.errorG)

@@ -31,7 +31,6 @@ app.use('/bootstrap', express.static(path.join(__dirname, '/node_modules/bootstr
 app.use(session({
     maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     keys: ['deneme']
-
 }));
 
 app.use(passport.initialize());

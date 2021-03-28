@@ -71,7 +71,7 @@ const logOut = (req, res) => {
     req.logout();
     res.redirect('/')
     req.session = null
-    res.json(req.user)
+        //res.json(req.user)
 }
 
 const errorG = (req, res) => {
